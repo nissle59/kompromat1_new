@@ -5,7 +5,7 @@
     "DEV": false,
     "DEV_LIMIT": 50
   },
-  "SSH_TUNNELED": true,
+  "SSH_TUNNELED": false,
   "MULTITHREADED": true,
   "THREADS": 50,
   "db": {
