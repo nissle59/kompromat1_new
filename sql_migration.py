@@ -151,6 +151,12 @@ def clear_article(url, html) -> dict:
 
     for element in article(text=lambda text: isinstance(text, Comment)):
         element.extract()
+    try:
+        for element in article.find_all('br'):
+            element.extract()
+    except:
+        pass
+
     if_count = 1
     iframes = []
     for iframe in article.find_all('iframe'):
@@ -160,7 +166,7 @@ def clear_article(url, html) -> dict:
             iframe_src = iframe['src']
         a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
                           features="html.parser")
-        a['href'] = iframe_src
+        a.a['href'] = iframe_src
         # iframe.attrs = {}
         # iframe.name = 'a'
         # iframe['href'] = iframe_src
@@ -169,7 +175,7 @@ def clear_article(url, html) -> dict:
         # iframe.replace_with(a)
         iframe.extract()
         if_count += 1
-        iframes.append(a)
+        iframes.append(a.a)
 
     v = soup.find_all('div')
     for div in v:
