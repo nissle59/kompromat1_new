@@ -28,17 +28,17 @@ rs.proxies = config.proxies[config.iter_proxy]
 rs.verify = False
 
 
-def GET(url):
+def GET(url, timeout=60):
     _log = logging.getLogger('parser.GET')
 
-    def with_proxy(url, proxy):
+    def with_proxy(url, proxy, timeout=timeout):
         px = {
             'http': 'http://' + proxy,
             'https': 'http://' + proxy
         }
         try:
             _log.info(f'Try to {url} with proxy {px["https"]}')
-            resp = rs.get(url, proxies=px)
+            resp = rs.get(url, proxies=px, timeout=timeout)
             if resp.status_code in [200, 201]:
                 return resp
             else:
@@ -47,14 +47,14 @@ def GET(url):
             return None
 
     try:
-        resp = rs.get(url)
+        resp = rs.get(url, timeout=timeout)
         _log.debug(f'{resp.status_code}')
         if resp.status_code in [200, 201]:
             return resp
         else:
             for p in config.proxies:
                 try:
-                    resp = with_proxy(url, p)
+                    resp = with_proxy(url, p, timeout=timeout)
                     if resp.status_code in [200, 201]:
                         return resp
                     else:
@@ -65,7 +65,7 @@ def GET(url):
     except Exception as e:
         for p in config.proxies:
             try:
-                resp = with_proxy(url, p)
+                resp = with_proxy(url, p, timeout=timeout)
                 if resp.status_code in [200, 201]:
                     return resp
                 else:
