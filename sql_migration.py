@@ -1,13 +1,15 @@
 from bs4 import BeautifulSoup, Comment, Tag
 from urllib.parse import urlparse
 import base64
-
+import warnings
 import config
 from sql import *
 from scraper import GET
 from pathlib import *
 from tqdm import tqdm
 
+
+warnings.filterwarnings("ignore")
 
 log = logging.getLogger("parser")
 log_level = logging.INFO
@@ -156,14 +158,16 @@ def clear_article(url, html) -> dict:
             iframe_src = 'https:' + iframe['src']
         else:
             iframe_src = iframe['src']
-        a = BeautifulSoup(f'<a href="{iframe_src}" target="_blank">| Источник №{if_count} |</a>',
+        a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
                           features="html.parser")
+        a['href'] = iframe_src
         # iframe.attrs = {}
         # iframe.name = 'a'
         # iframe['href'] = iframe_src
         # iframe['target'] = '_blank'
 
         # iframe.replace_with(a)
+        iframe.extract()
         if_count += 1
         iframes.append(a)
 
