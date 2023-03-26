@@ -283,10 +283,8 @@ if __name__ == '__main__':
     sql_version()
     sql_dups_delete()
 
-    if not config.DEV:
-        lnks = get_all_links()
-        #sql_push_links(lnks)
 
+    lnks = get_all_links()
     config.TOTAL_LINKS = len(lnks)
     for lnk in lnks:
         sql_push_link(lnk)
