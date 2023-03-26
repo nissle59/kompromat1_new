@@ -63,7 +63,7 @@ def clear_article(url, html) -> dict:
                 img_src = 'https:' + img['src']
             if img_src.count('//') > 1:
                 img_src = 'https://' + img_src[len(config.base_url) + 1:]
-            rblob = GET(img_src, timeout=2)
+            rblob = GET(img_src, timeout=1)
             if rblob:
                 blob = rblob.content
                 img_b64 = base64.b64encode(blob).decode()
