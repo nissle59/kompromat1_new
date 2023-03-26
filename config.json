@@ -1,0 +1,35 @@
+{
+  "base_url": "https://kompromat1.pro/",
+  "archive_url": "articles/archive/",
+  "DEV": {
+    "DEV": false,
+    "DEV_LIMIT": 50
+  },
+  "SSH_TUNNELED": true,
+  "MULTITHREADED": true,
+  "THREADS": 50,
+  "db": {
+    "user": "twpguser",
+    "pass": "785564tw",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "name": "twdb"
+  },
+  "ssh": {
+    "host": "pve.thron.host",
+    "port": 7222,
+    "user": "root",
+    "pass": "qAzWsX159$$$"
+  },
+  "headers": {
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "accept-language": "ru,en;q=0.9",
+    "cache-control": "max-age=0",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 YaBrowser/23.1.5.708 Yowser/2.5 Safari/537.36"
+  },
+  "proxies": [
+    "SOGBee:d25Hs5A@188.191.164.19:9078",
+    "SOGMeg:rTd57fsDh@188.191.164.19:9005",
+    "SOGMTS:gF56k2S@goldproxy2.linkpc.net:1109"
+  ]
+}
