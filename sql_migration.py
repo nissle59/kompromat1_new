@@ -55,7 +55,7 @@ def init_logs(logname="parser"):
 
 def clear_article(url, html) -> dict:
     def get_img_to_base64(img_src: str):
-        img_src = img_src.replace('\"','')
+        img_src = img_src.replace('\"','').replace('\\','')
         if img_src[-1:] == '/':
             img_src = img_src[:-1]
         if img_src[:4] != 'data':

@@ -162,16 +162,16 @@ def sql_set_link_downloaded(link):
 def sql_add_article(d: dict):
     _log = logging.getLogger('parser.sql.add_article')
     try:
-        if (d['date']!=None) and (d['tags']!=None):
+        if ('date' in d.keys()) and ('tags' in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, date, description, tags) VALUES (%s, %s, %s, %s, %s, %s, %s)"
             values = (d['local_id'],d['name'],d['origin'],d['source'],d['date'],d['description'],d['tags'])
-        elif (d['date']!=None) and (d['tags']==None):
+        elif ('date' in d.keys()) and ('tags' not in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, date, description) VALUES (%s, %s, %s, %s, %s, %s)"
             values = (d['local_id'], d['name'], d['origin'], d['source'], d['date'], d['description'])
-        elif (d['date']==None) and (d['tags']!=None):
+        elif ('date' not in d.keys()) and ('tags' in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, tags, description) VALUES (%s, %s, %s, %s, %s, %s)"
             values = (d['local_id'], d['name'], d['origin'], d['source'], d['tags'], d['description'])
-        elif (d['date']==None) and (d['tags']==None):
+        elif ('date' not in d.keys()) and ('tags' not in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, description) VALUES (%s, %s, %s, %s, %s, %s)"
             values = (d['local_id'], d['name'], d['origin'], d['source'], d['description'])
         sql_cur.execute(q,values)
