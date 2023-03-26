@@ -243,7 +243,7 @@ def get_all_links(init_catalog = Path(Path.cwd() / 'pages')):
         d = json.loads(Path(file).read_text(encoding='utf-8'))
         lnk = {
             'link': d['source'],
-            'name': d['title'],
+            'name': d['name'],
             'date': d['date']
         }
         links.append(lnk)
