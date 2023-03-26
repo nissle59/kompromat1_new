@@ -180,7 +180,7 @@ def clear_article(url, html) -> dict:
     }
 
 
-def parse_article(file_json, date):
+def parse_article(file_json, date=None):
     _log = logging.getLogger('parser.parse_article')
     art_catalog = Path(file_json).parent
     html_file = list(art_catalog.rglob('*.html'))
@@ -201,10 +201,11 @@ def parse_article(file_json, date):
             'name': art['title'],
             'origin': origin,
             'source': url,
-            'date': date,
+        #    'date': date,
             'description': art['post'],
         }
-
+        if date:
+            d.update({'date': date})
     if d:
         if sql_add_article(d):
             config.CURRENT_LINK += 1
@@ -231,9 +232,12 @@ def parse_article(file_json, date):
 
 def parse_articles(links: dict):
     _log = logging.getLogger('parser.parse_articles')
-    #urls = [link['link'] for link in links]
-    for link in links:
-        d = parse_article(link['link'],link['date'])
+    urls = [link['link'] for link in links]
+    files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
+    for file in files:
+        js = json.loads(file.read_text())
+        if js['source'] in urls:
+            d = parse_article(file,js['date'])
 
 
 def get_all_links(init_catalog = Path(Path.cwd() / 'pages')):
