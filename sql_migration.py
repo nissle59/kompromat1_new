@@ -282,7 +282,7 @@ if __name__ == '__main__':
         sql_push_link(lnk)
 
     links = sql_get_links()
-
+    config.CURRENT_LINK = 1
     if links:
         parse_articles(links)
     else:
