@@ -55,13 +55,14 @@ def init_logs(logname="parser"):
 def clear_article(url, html) -> dict:
     def get_img_to_base64(img_src: str):
         img_src = img_src.replace('\"', '').replace('\\', '')
+        print(img_src)
         if img_src[-1:] == '/':
             img_src = img_src[:-1]
         if img_src[:4] != 'data':
             if img_src[:2] == '//':
                 img_src = 'https:' + img['src']
             if img_src.count('//') > 1:
-                img_src = 'https://' + img_src[len(config.base_url) + 3:]
+                img_src = 'https://' + img_src[len(config.base_url) + 1:]
             rblob = GET(img_src)
             if rblob:
                 blob = rblob.content
