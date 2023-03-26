@@ -68,10 +68,10 @@ def clear_article(url, html) -> dict:
             return img_src
 
     _log = logging.getLogger('parser.clear_article')
-    soup = BeautifulSoup(html, features='html.parser')
-    base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
-    title = str(base.find('h1').contents[0])
-    article = base.find('div', {'class': 'articles_one'})
+    article = BeautifulSoup(html, features='html.parser')
+    # article = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
+    # title = str(base.find('h1').contents[0])
+    # article = base.find('div', {'class': 'articles_one'})
 
     # try:
     #     t_i_div = article.find('div', {'class': 'img_wrap'})
@@ -175,7 +175,7 @@ def clear_article(url, html) -> dict:
         post += pend.prettify().strip(' \n')
 
     return {
-        'title':title,
+        #'title':title,
         'post':post
     }
 
@@ -198,7 +198,7 @@ def parse_article(file_json, date=None):
 
         d = {
             'local_id': local_id,
-            'name': art['title'],
+            'name': d_file['name'],
             'origin': origin,
             'source': url,
         #    'date': date,
