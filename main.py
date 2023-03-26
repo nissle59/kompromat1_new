@@ -53,9 +53,12 @@ if __name__ == '__main__':
     init_db(config.SSH_TUNNELED)
     sql_version()
     sql_dups_delete()
-    links = sql_get_links()
+
     if not config.DEV:
-        get_articles_links()
+        lnks = get_articles_links()
+        sql_push_links(lnks)
+    links = sql_get_links()
+
     if links:
         if config.MULTITHREADED:
             multithreaded_parse_articles(links)

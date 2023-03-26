@@ -4,6 +4,7 @@ import base64
 from sql import *
 from scraper import GET
 from pathlib import *
+from tqdm import tqdm
 
 
 log = logging.getLogger("parser")
@@ -228,11 +229,41 @@ def parse_article(file_json, date):
         _log.info(f'{url} FAILED')
 
 
+def parse_articles(links: dict):
+    _log = logging.getLogger('parser.parse_articles')
+    #urls = [link['link'] for link in links]
+    for link in links:
+        d = parse_article(link['link'],link['date'])
+
+
+def get_all_links(init_catalog = Path(Path.cwd() / 'pages')):
+    all_jsons = list(init_catalog.rglob('*/*.json'))
+    links = []
+    for file in tqdm(all_jsons):
+        d = json.loads(Path(file).read_text(encoding='utf-8'))
+        lnk = {
+            'link': d['source'],
+            'name': d['title'],
+            'date': d['date']
+        }
+        links.append(lnk)
+    return links
+
 
 if __name__ == '__main__':
     init_logs()
     init_db(config.SSH_TUNNELED)
+    sql_version()
+
+    if not config.DEV:
+        lnks = get_all_links()
+        sql_push_links(lnks)
 
     links = sql_get_links()
+
+    if links:
+        parse_articles(links)
+    else:
+        log.info('No articles to parse')
 
     close_db(config.SSH_TUNNELED)

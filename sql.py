@@ -108,16 +108,16 @@ def sql_push_links(lnks: list):
 
 def sql_get_links():
     _log = logging.getLogger('parser.sql.get_links')
-    select_query = "SELECT * FROM links WHERE downloaded = False" #AND uploaded = False"
+    select_query = "SELECT * FROM links WHERE downloaded = False AND source LIKE %s" #AND uploaded = False"
     if DEV:
-        select_query = f"SELECT * FROM links WHERE downloaded = False LIMIT {DEV_LIMIT}" #AND uploaded = False LIMIT 50"
+        select_query = f"SELECT * FROM links WHERE downloaded = False AND source LIKE %s LIMIT {DEV_LIMIT}" #AND uploaded = False LIMIT 50"
         _log.info(f'DEV mode! with DEV_LIMIT = {DEV_LIMIT}')
     try:
-        sql_cur.execute(select_query)
+        sql_cur.execute(select_query, (config.base_url + "%",))
         records = sql_cur.fetchall()
     except:
         sql_conn.rollback()
-        sql_cur.execute(select_query)
+        sql_cur.execute(select_query, (config.base_url + "%",))
         records = sql_cur.fetchall()
     config.TOTAL_LINKS = len(records)
     if config.TOTAL_LINKS > 0:
