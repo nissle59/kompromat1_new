@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup, Comment, Tag
 from urllib.parse import urlparse
 import base64
+
+import config
 from sql import *
 from scraper import GET
 from pathlib import *
@@ -56,6 +58,8 @@ def clear_article(url, html) -> dict:
         if img_src[:4] != 'data':
             if img_src[:2] == '//':
                 img_src = 'https:' + img['src']
+            if img_src.count('//')>1:
+                img_src = 'https://' + img_src[len(config.base_url)+1:]
             rblob = GET(img_src)
             if rblob:
                 blob = rblob.content
@@ -149,13 +153,16 @@ def clear_article(url, html) -> dict:
             iframe_src = 'https:' + iframe['src']
         else:
             iframe_src = iframe['src']
-        iframe.attrs = {}
-        iframe.name = 'a'
-        iframe['href'] = iframe_src
-        iframe['target'] = '_blank'
-        iframe.string.replace_with(f"| Источник №{if_count} |")
+        a = BeautifulSoup(f'<a href="{iframe_src}" target="_blank">| Источник №{if_count} |</a>',
+                          features="html.parser")
+        # iframe.attrs = {}
+        # iframe.name = 'a'
+        # iframe['href'] = iframe_src
+        # iframe['target'] = '_blank'
+
+        # iframe.replace_with(a)
         if_count += 1
-        iframes.append(iframe.extract())
+        iframes.append(a)
 
     v = soup.find_all('div')
     for div in v:
