@@ -68,7 +68,8 @@ def clear_article(url, html) -> dict:
             return img_src
 
     _log = logging.getLogger('parser.clear_article')
-    article = BeautifulSoup(html, features='html.parser')
+    soup = BeautifulSoup(html, features='html.parser')
+    article = soup
     # article = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
     # title = str(base.find('h1').contents[0])
     # article = base.find('div', {'class': 'articles_one'})
