@@ -8,7 +8,6 @@ from scraper import GET
 from pathlib import *
 from tqdm import tqdm
 
-
 warnings.filterwarnings("ignore")
 
 log = logging.getLogger("parser")
@@ -53,18 +52,16 @@ def init_logs(logname="parser"):
     return
 
 
-
-
 def clear_article(url, html) -> dict:
     def get_img_to_base64(img_src: str):
-        img_src = img_src.replace('\"','').replace('\\','')
+        img_src = img_src.replace('\"', '').replace('\\', '')
         if img_src[-1:] == '/':
             img_src = img_src[:-1]
         if img_src[:4] != 'data':
             if img_src[:2] == '//':
                 img_src = 'https:' + img['src']
-            if img_src.count('//')>1:
-                img_src = 'https://' + img_src[len(config.base_url)+3:]
+            if img_src.count('//') > 1:
+                img_src = 'https://' + img_src[len(config.base_url) + 3:]
             rblob = GET(img_src)
             if rblob:
                 blob = rblob.content
@@ -196,8 +193,8 @@ def clear_article(url, html) -> dict:
         post += pend.prettify().strip(' \n')
 
     return {
-        #'title':title,
-        'post':post
+        # 'title':title,
+        'post': post
     }
 
 
@@ -222,13 +219,13 @@ def parse_article(file_json, date=None):
             'name': d_file['name'],
             'origin': origin,
             'source': url,
-        #    'date': date,
+            #    'date': date,
             'description': art['post'],
         }
         if date:
             d.update({'date': date})
         if d_file['tags']:
-            d.update({'tags':"|".join(d_file['tags'])})
+            d.update({'tags': "|".join(d_file['tags'])})
     if d:
         if sql_add_article(d):
             config.CURRENT_LINK += 1
@@ -260,10 +257,10 @@ def parse_articles(links: dict):
     for file in files:
         js = json.loads(file.read_text())
         if js['source'] in urls:
-            d = parse_article(file,js['date'])
+            d = parse_article(file, js['date'])
 
 
-def get_all_links(init_catalog = Path(Path.cwd() / 'pages')):
+def get_all_links(init_catalog=Path(Path.cwd() / 'pages')):
     all_jsons = list(init_catalog.rglob('*/*.json'))
     links = []
     for file in tqdm(all_jsons):
@@ -283,11 +280,10 @@ if __name__ == '__main__':
     sql_version()
     sql_dups_delete()
 
-
-    lnks = get_all_links()
-    config.TOTAL_LINKS = len(lnks)
-    for lnk in lnks:
-        sql_push_link(lnk)
+    # lnks = get_all_links()
+    # config.TOTAL_LINKS = len(lnks)
+    # for lnk in lnks:
+    #     sql_push_link(lnk)
 
     links = sql_get_links()
     config.CURRENT_LINK = 1
