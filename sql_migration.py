@@ -254,6 +254,7 @@ if __name__ == '__main__':
     init_logs()
     init_db(config.SSH_TUNNELED)
     sql_version()
+    sql_dups_delete()
 
     if not config.DEV:
         lnks = get_all_links()
@@ -268,4 +269,5 @@ if __name__ == '__main__':
     else:
         log.info('No articles to parse')
 
+    sql_dups_delete()
     close_db(config.SSH_TUNNELED)
