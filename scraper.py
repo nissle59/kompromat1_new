@@ -60,7 +60,7 @@ def GET(url):
                     else:
                         _log.info(f'Failed with status {resp.status_code}')
                 except Exception as e:
-                    _log.info(f'Failed with error {e}')
+                    #_log.info(f'Failed with error {e}')
                     pass
     except Exception as e:
         for p in config.proxies:
