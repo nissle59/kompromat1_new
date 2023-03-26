@@ -79,7 +79,7 @@ def sql_get_last_link_date():
 
 
 def sql_push_link(lnk):
-    _log = logging.getLogger('parser.sql.pushlinks')
+    _log = logging.getLogger('parser.sql.pushlink')
     try:
         if lnk['date']:
             insert_query = "INSERT INTO links (name, link, date) VALUES (%s, %s, %s)"
@@ -88,10 +88,12 @@ def sql_push_link(lnk):
             insert_query = "INSERT INTO links (name, link) VALUES (%s, %s)"
             sql_cur.execute(insert_query, (lnk['name'], lnk['link']))
         sql_conn.commit()
-        _log.info(f'[{lnk["name"]}] Ok!')
+        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] ({config.CURRENT_LINK} of {config.TOTAL_LINKS}) [{lnk["name"]}] Ok!')
+        config.CURRENT_LINK += 1
         return True
     except Exception as e:
-        _log.error(f'[{lnk["name"]}] ERROR: {e}')
+        _log.error(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] ({config.CURRENT_LINK} of {config.TOTAL_LINKS}) [{lnk["name"]}] ERROR: {e}')
+        config.CURRENT_LINK += 1
         sql_conn.rollback()
         return False
 

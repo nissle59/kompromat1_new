@@ -259,7 +259,9 @@ if __name__ == '__main__':
     if not config.DEV:
         lnks = get_all_links()
         #sql_push_links(lnks)
-    for lnk in tqdm(lnks):
+
+    config.TOTAL_LINKS = len(lnks)
+    for lnk in lnks:
         sql_push_link(lnk)
 
     links = sql_get_links()
