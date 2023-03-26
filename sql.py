@@ -162,8 +162,18 @@ def sql_set_link_downloaded(link):
 def sql_add_article(d: dict):
     _log = logging.getLogger('parser.sql.add_article')
     try:
-        q = "INSERT INTO articles (local_id, name, origin, source, date, description) VALUES (%s, %s, %s, %s, %s, %s)"
-        values = (d['local_id'],d['name'],d['origin'],d['source'],d['date'],d['description'])
+        if (d['date']!=None) and (d['tags']!=None):
+            q = "INSERT INTO articles (local_id, name, origin, source, date, description, tags) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            values = (d['local_id'],d['name'],d['origin'],d['source'],d['date'],d['description'],d['tags'])
+        elif (d['date']!=None) and (d['tags']==None):
+            q = "INSERT INTO articles (local_id, name, origin, source, date, description) VALUES (%s, %s, %s, %s, %s, %s)"
+            values = (d['local_id'], d['name'], d['origin'], d['source'], d['date'], d['description'])
+        elif (d['date']==None) and (d['tags']!=None):
+            q = "INSERT INTO articles (local_id, name, origin, source, tags, description) VALUES (%s, %s, %s, %s, %s, %s)"
+            values = (d['local_id'], d['name'], d['origin'], d['source'], d['tags'], d['description'])
+        elif (d['date']==None) and (d['tags']==None):
+            q = "INSERT INTO articles (local_id, name, origin, source, description) VALUES (%s, %s, %s, %s, %s, %s)"
+            values = (d['local_id'], d['name'], d['origin'], d['source'], d['description'])
         sql_cur.execute(q,values)
         sql_conn.commit()
         if sql_set_link_downloaded(d['source']):
@@ -172,10 +182,10 @@ def sql_add_article(d: dict):
             return False
     except Exception as e:
         _log.error(e)
-        if sql_set_link_downloaded(d['source']):
-            return True
-        else:
-            return False
+        # if sql_set_link_downloaded(d['source']):
+        #     return True
+        # else:
+        #     return False
         sql_conn.rollback()
         return False
 
