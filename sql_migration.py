@@ -237,7 +237,7 @@ def parse_article(file_json, date=None):
                     image = {
                         'source': url,
                         'b_data': title_img.read_bytes(),
-                        'ext': title_img.suffix
+                        'ext': title_img.suffix[1:]
                     }
                     sql_add_image(image)
                 except Exception as e:
