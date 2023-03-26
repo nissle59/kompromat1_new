@@ -163,7 +163,7 @@ def clear_article(url, html) -> dict:
             iframe_src = iframe['src']
         a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
                           features="html.parser")
-        a.a['href'] = iframe_src
+        a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
         # iframe.attrs = {}
         # iframe.name = 'a'
         # iframe['href'] = iframe_src
@@ -194,7 +194,7 @@ def clear_article(url, html) -> dict:
 
     return {
         # 'title':title,
-        'post': post
+        'post': post.strip(' \r\n')
     }
 
 
