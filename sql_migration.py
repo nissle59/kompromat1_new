@@ -92,9 +92,9 @@ def clear_article(url, html) -> dict:
     # except:
     #     title_img = None
 
-    tags = base.find_all('a', {'class': 'article-tag'})
-    for tag in tags:
-        tags[tags.index(tag)] = tag.text
+    # tags = base.find_all('a', {'class': 'article-tag'})
+    # for tag in tags:
+    #     tags[tags.index(tag)] = tag.text
     try:
         article.find('script').extract()
     except:
@@ -207,6 +207,8 @@ def parse_article(file_json, date=None):
         }
         if date:
             d.update({'date': date})
+        if d_file['tags']:
+            d.update({'tags':"|".join(d_file['tags'])})
     if d:
         if sql_add_article(d):
             config.CURRENT_LINK += 1
