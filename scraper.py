@@ -165,8 +165,11 @@ def get_articles_links():
     _log = logging.getLogger('parser.get_articles_links')
     arch = get_archive_links()
     lnks = []
+    cur_link = 1
+    tot_links = len(arch)
     for day in arch:
-        print(day)
+        _log.info(f'[{cur_link} of {tot_links}] LINK ({urlparse(day).path.split("/")[-1:][0]})')
+        cur_link += 1
         lnks += get_day_links(day)
     return lnks
 
