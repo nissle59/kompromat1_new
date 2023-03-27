@@ -90,3 +90,6 @@ REMOVE_ATTRIBUTES = ['lang','language','onmouseover','onmouseout','script','styl
                         'dir','face','size','color','style','class','width','height','hspace',
                         'border','valign','align','background','bgcolor','text','link','vlink',
                         'alink','cellpadding','cellspacing']
+
+urls = None
+files = None

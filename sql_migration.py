@@ -259,13 +259,23 @@ def parse_article(file_json, date=None):
         _log.debug(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} FAILED')
 
 
+def get_files_and_urls():
+    _log = logging.getLogger('parser.prepare')
+    _log.info('Getting URLs...')
+    config.urls = [link['link'] for link in links]
+    _log.info('Getting FILEs...')
+    config.files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
+    _log.info('Done!')
+    return {'files':config.files, 'urls': config.urls}
+
+
 def parse_articles(links: dict):
     _log = logging.getLogger('parser.parse_articles')
-    urls = [link['link'] for link in links]
-    files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
-    for file in files:
+    # urls = [link['link'] for link in links]
+    # files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
+    for file in config.files:
         js = json.loads(file.read_text())
-        if js['source'] in urls:
+        if js['source'] in config.urls:
             d = parse_article(file, js['date'])
         else:
             _log.debug(f"{js['source']} not in SQL LINKS")
@@ -342,6 +352,7 @@ if __name__ == '__main__':
     links = sql_get_links()
     config.CURRENT_LINK = 1
     if links:
+        get_files_and_urls()
         if config.MULTITHREADED:
             multithreaded_parse_articles(links)
         else:
