@@ -274,9 +274,10 @@ def parse_articles(files):
     # urls = [link['link'] for link in links]
     # files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
     for file in files:
-        js = json.loads(file.read_text())
+        print(Path(file))
+        js = json.loads(Path(file).read_text())
         if js['source'] in config.urls:
-            d = parse_article(file, js['date'])
+            d = parse_article(Path(file), js['date'])
         else:
             _log.debug(f"{js['source']} not in SQL LINKS")
     _log.info(f'Parsing ended normally')
