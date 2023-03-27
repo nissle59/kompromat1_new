@@ -195,7 +195,7 @@ def clear_article(url, html) -> dict:
 
     return {
         # 'title':title,
-        'post': post.strip(' \r\n')
+        'post': post.strip(' \r\n').replace('\n',' ')
     }
 
 
@@ -227,6 +227,8 @@ def parse_article(file_json, date=None):
             d.update({'date': date})
         if d_file['tags']:
             d.update({'tags': "|".join(d_file['tags'])})
+    else:
+        _log.info(f"No html file for {url}")
     if d:
         if sql_add_article(d):
             config.CURRENT_LINK += 1
@@ -246,9 +248,11 @@ def parse_article(file_json, date=None):
             _log.info(
                 f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed and added')
         else:
-            _log.info(f'{url} parsed, NOT added')
+            config.CURRENT_LINK += 1
+            _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed, NOT added')
     else:
-        _log.info(f'{url} FAILED')
+        config.CURRENT_LINK += 1
+        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} FAILED')
 
 
 def parse_articles(links: dict):
