@@ -209,6 +209,7 @@ def parse_article(file_json, date=None):
     art = {}
     img = None
     if html_file:
+        print(url)
         html_file = html_file[0]
         local_id = int(urlparse(url).path.split('/')[-1:][0].split('-')[0])
         origin = f'{urlparse(url).scheme}://{urlparse(url).netloc}/'
