@@ -274,7 +274,7 @@ def parse_articles(files):
     # urls = [link['link'] for link in links]
     # files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
     for file in files:
-        print(Path(file))
+        print(file)
         js = json.loads(Path(file).read_text())
         if js['source'] in config.urls:
             d = parse_article(Path(file), js['date'])
