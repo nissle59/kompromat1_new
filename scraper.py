@@ -166,6 +166,7 @@ def get_articles_links():
     arch = get_archive_links()
     lnks = []
     for day in arch:
+        print(day)
         lnks += get_day_links(day)
     return lnks
 
