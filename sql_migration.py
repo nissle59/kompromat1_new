@@ -354,9 +354,9 @@ if __name__ == '__main__':
     if links:
         get_files_and_urls()
         if config.MULTITHREADED:
-            multithreaded_parse_articles(links)
+            multithreaded_parse_articles()
         else:
-            parse_articles(links)
+            parse_articles()
     else:
         log.info('No articles to parse')
 

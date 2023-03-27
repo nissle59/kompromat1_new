@@ -216,7 +216,7 @@ def sql_dups_delete(table_name='articles', column_name='source'):
           AND a.ctid <> b.ctid"""
         sql_cur.execute(q)
         sql_conn.commit()
-        _log.info(f'Deleted duplicated from {table_name}')
+        _log.info(f'Deleted duplicates from {table_name}')
         return True
     except Exception as e:
         _log.error(e)
