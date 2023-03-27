@@ -37,12 +37,12 @@ def GET(url, timeout=60):
             'https': 'http://' + proxy
         }
         try:
-            _log.info(f'Try to {url} with proxy {px["https"]}')
+            #_log.info(f'Try to {url} with proxy {px["https"]}')
             resp = rs.get(url, proxies=px, timeout=timeout)
             if resp.status_code in [200, 201]:
                 return resp
             else:
-                _log.info(f'Failed with status {resp.status_code}')
+                _log.debug(f'Failed with status {resp.status_code}')
         except:
             return None
 
@@ -58,7 +58,7 @@ def GET(url, timeout=60):
                     if resp.status_code in [200, 201]:
                         return resp
                     else:
-                        _log.info(f'Failed with status {resp.status_code}')
+                        _log.debug(f'Failed with status {resp.status_code}')
                 except Exception as e:
                     #_log.info(f'Failed with error {e}')
                     pass
@@ -69,10 +69,10 @@ def GET(url, timeout=60):
                 if resp.status_code in [200, 201]:
                     return resp
                 else:
-                    _log.info(f'Failed with status {resp.status_code}')
+                    _log.debug(f'Failed with status {resp.status_code}')
             except Exception as e:
                 pass
-        _log.info(f'{url} failed')
+        _log.debug(f'{url} failed')
         return None
 
 

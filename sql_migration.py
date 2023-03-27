@@ -211,7 +211,7 @@ def parse_article(file_json, date=None):
     art = {}
     img = None
     if html_file:
-        print(url)
+        #print(url)
         html_file = html_file[0]
         local_id = int(urlparse(url).path.split('/')[-1:][0].split('-')[0])
         origin = f'{urlparse(url).scheme}://{urlparse(url).netloc}/'
@@ -231,7 +231,7 @@ def parse_article(file_json, date=None):
         if d_file['tags']:
             d.update({'tags': "|".join(d_file['tags'])})
     else:
-        _log.info(f"No html file for {url}")
+        _log.debug(f"No html file for {url}")
     if d:
         if sql_add_article(d):
             config.CURRENT_LINK += 1
@@ -249,13 +249,13 @@ def parse_article(file_json, date=None):
                 except Exception as e:
                     _log.info(e)
             _log.info(
-                f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed and added')
+                f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} parsed and added')
         else:
             config.CURRENT_LINK += 1
-            _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed, NOT added')
+            _log.debug(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} parsed, NOT added')
     else:
         config.CURRENT_LINK += 1
-        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} FAILED')
+        _log.debug(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} FAILED')
 
 
 def parse_articles(links: dict):
@@ -267,7 +267,7 @@ def parse_articles(links: dict):
         if js['source'] in urls:
             d = parse_article(file, js['date'])
         else:
-            _log.info(f"{js['source']} not in SQL LINKS")
+            _log.debug(f"{js['source']} not in SQL LINKS")
     _log.info(f'Parsing ended normally')
 
 
