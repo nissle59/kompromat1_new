@@ -168,7 +168,10 @@ def clear_article(url, html) -> dict:
             a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
             iframes.append(a.a)
             if_count += 1
-        iframe.extract()
+        try:
+            iframe.extract()
+        except:
+            pass
 
 
     v = soup.find_all('div')
