@@ -81,7 +81,7 @@ def get_archive_links():
     links_urls = []
     path = config.archive_url
     logging.info(path)
-    r = GET(path)
+    r = GET(path, timeout=60)
     if r:
         years = []
         html = r.content.decode('windows-1251')
@@ -114,6 +114,9 @@ def get_archive_links():
                             links_urls.append(s)
         config.archive_links = links_urls
         return links_urls
+    else:
+        _log.info(f'Can\'t get arch [{path}], try again')
+        get_archive_links()
 
 
 def _parse_page(html, url):
