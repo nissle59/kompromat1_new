@@ -109,7 +109,7 @@ def get_archive_links():
                     links = table.find_all('a')
                     if len(links) > 0:
                         for link in links:
-                            s = config.base_url + link['href']
+                            s = config.base_url[:-1] + link['href']
 
                             links_urls.append(s)
         config.archive_links = links_urls
