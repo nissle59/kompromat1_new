@@ -57,11 +57,11 @@ def init_logs(logname="parser"):
 
 def clear_article(url, html) -> dict:
     def get_img_to_base64(img_src: str):
-        img_src = img_src.replace('\"', '').replace('\\', '')
         #print(img_src)
         if img_src[-1:] == '/':
             img_src = img_src[:-1]
-        if img_src[:4] != 'data':
+        if img_src.find('data:image') < 0:
+            img_src = img_src.replace('\"', '').replace('\\', '')
             if img_src[:2] == '//':
                 img_src = 'https:' + img['src']
             if img_src.count('//') > 1:
@@ -69,8 +69,16 @@ def clear_article(url, html) -> dict:
             rblob = GET(img_src, timeout=1)
             if rblob:
                 blob = rblob.content
+                jpegs = ['jpg','jpeg']
+                try:
+                    ext = urlparse(img_src).path.split('/')[-1:][0].split('.')[-1:][0].lower()
+                except:
+                    ext = 'jpg'
                 img_b64 = base64.b64encode(blob).decode()
-                img_src = 'data:image/png;base64,' + img_b64
+                if ext in jpegs:
+                    img_src = 'data:image/jpeg;base64,' + img_b64
+                else:
+                    img_src = 'data:image/png;base64,' + img_b64
                 return img_src
             else:
                 return None
