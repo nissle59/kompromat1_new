@@ -257,20 +257,32 @@ def clear_article(url, html):
 
     for element in article(text=lambda text: isinstance(text, Comment)):
         element.extract()
+    try:
+        for element in article.find_all('br'):
+            element.extract()
+    except:
+        pass
+
     if_count = 1
     iframes = []
     for iframe in article.find_all('iframe'):
-        if iframe['src'][:2] == '//':
-            iframe_src = 'https:' + iframe['src']
-        else:
-            iframe_src = iframe['src']
-        iframe.attrs = {}
-        iframe.name = 'a'
-        iframe['href'] = iframe_src
-        iframe['target'] = '_blank'
-        iframe.string.replace_with(f"| Источник №{if_count} |")
-        if_count += 1
-        iframes.append(iframe.extract())
+        if iframe:
+            try:
+                if iframe['src'][:2] == '//':
+                    iframe_src = 'https:' + iframe['src']
+                else:
+                    iframe_src = iframe['src']
+                a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
+                                  features="html.parser")
+                a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
+                iframes.append(a.a)
+                if_count += 1
+            except:
+                pass
+        try:
+            iframe.extract()
+        except:
+            pass
 
     v = soup.find_all('div')
     for div in v:
