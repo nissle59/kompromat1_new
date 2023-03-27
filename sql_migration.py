@@ -259,6 +259,9 @@ def parse_articles(links: dict):
         js = json.loads(file.read_text())
         if js['source'] in urls:
             d = parse_article(file, js['date'])
+        else:
+            _log.info(f"{js['source']} not in SQL LINKS")
+    _log.info(f'Parsing ended normally')
 
 
 def get_all_links(init_catalog=Path(Path.cwd() / 'pages')):
