@@ -158,22 +158,18 @@ def clear_article(url, html) -> dict:
     if_count = 1
     iframes = []
     for iframe in article.find_all('iframe'):
-        if iframe['src'][:2] == '//':
-            iframe_src = 'https:' + iframe['src']
-        else:
-            iframe_src = iframe['src']
-        a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
-                          features="html.parser")
-        a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
-        # iframe.attrs = {}
-        # iframe.name = 'a'
-        # iframe['href'] = iframe_src
-        # iframe['target'] = '_blank'
-
-        # iframe.replace_with(a)
+        if 'src' in iframe.keys():
+            if iframe['src'][:2] == '//':
+                iframe_src = 'https:' + iframe['src']
+            else:
+                iframe_src = iframe['src']
+            a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
+                              features="html.parser")
+            a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
+            iframes.append(a.a)
+            if_count += 1
         iframe.extract()
-        if_count += 1
-        iframes.append(a.a)
+
 
     v = soup.find_all('div')
     for div in v:
