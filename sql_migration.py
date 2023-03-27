@@ -324,7 +324,7 @@ def multithreaded_parse_articles():
     for i in range(0, config.THREADS):
         _log.info(f'{i + 1} of {config.THREADS}')
 
-        l_c.append(links[l_count * i:l_count * i + l_count])
+        l_c.append(files[l_count * i:l_count * i + l_count])
 
     for i in range(0, config.THREADS):
         t_s.append(
