@@ -3,7 +3,8 @@
   "archive_url": "articles/archive/",
   "DEV": {
     "DEV": false,
-    "DEV_LIMIT": 10
+    "DEV_LIMIT": 10,
+    "LOGGING_DEBUG": true
   },
   "SSH_TUNNELED": false,
   "MULTITHREADED": true,

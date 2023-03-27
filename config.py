@@ -3,6 +3,7 @@ with open('config.json','r') as f:
     c = json.loads(f.read())
 
 DEV = c['DEV']['DEV']
+LOGGING_DEBUG = c['DEV']['LOGGING_DEBUG']
 if DEV:
     DEV_LIMIT = c['DEV']['DEV_LIMIT']
 else:
