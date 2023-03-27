@@ -79,7 +79,7 @@ def GET(url, timeout=60):
 def get_archive_links():
     _log = logging.getLogger('parser.get_archive_links')
     links_urls = []
-    path = config.archive_url
+    path = config.archive_url[:-1]
     logging.info(path)
     r = GET(path, timeout=60)
     if r:
