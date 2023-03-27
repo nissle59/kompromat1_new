@@ -269,11 +269,11 @@ def get_files_and_urls():
     return {'files':config.files, 'urls': config.urls}
 
 
-def parse_articles(links: dict):
+def parse_articles(files):
     _log = logging.getLogger('parser.parse_articles')
     # urls = [link['link'] for link in links]
     # files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
-    for file in config.files:
+    for file in files:
         js = json.loads(file.read_text())
         if js['source'] in config.urls:
             d = parse_article(file, js['date'])
@@ -299,25 +299,25 @@ def get_all_links(init_catalog=Path(Path.cwd() / 'pages')):
     return links
 
 
-def multithreaded_parse_articles(links: dict):
+def multithreaded_parse_articles():
     _log = logging.getLogger('parser.multiparse')
     t_s = []
     tc = config.THREADS
+    files = config.files
+    l_count, l_mod = divmod(len(files), tc)
 
-    l_count, l_mod = divmod(len(links), tc)
-
-    l_mod = len(links) % tc
+    l_mod = len(files) % tc
 
     if l_mod != 0:
 
-        l_mod = len(links) % config.THREADS
+        l_mod = len(files) % config.THREADS
         if l_mod == 0:
             tc = config.THREADS
-            l_count = len(links) // tc
+            l_count = len(files) // tc
 
         else:
             tc = config.THREADS - 1
-            l_count = len(links) // tc
+            l_count = len(files) // tc
 
     l_c = []
     for i in range(0, config.THREADS):
@@ -330,11 +330,11 @@ def multithreaded_parse_articles(links: dict):
             threading.Thread(target=parse_articles, args=(l_c[i],), daemon=True))
     for t in t_s:
         t.start()
-        _log.info(f'Started thread #{t_s.index(t) + 1} of {len(t_s)} with {len(l_c[t_s.index(t)])} links')
+        _log.info(f'Started thread #{t_s.index(t) + 1} of {len(t_s)} with {len(l_c[t_s.index(t)])} files')
 
     for t in t_s:
         t.join()
-        _log.info(f'Joined thread #{t_s.index(t) + 1} of {len(t_s)} with {len(l_c[t_s.index(t)])} links')
+        _log.info(f'Joined thread #{t_s.index(t) + 1} of {len(t_s)} with {len(l_c[t_s.index(t)])} files')
 
 
 
