@@ -235,7 +235,7 @@ def parse_article(file_json, date=None):
         _log.debug(f"No html file for {url}")
     if d:
         if sql_add_article(d):
-            config.CURRENT_LINK += 1
+            #config.CURRENT_LINK += 1
             sql_set_link_downloaded(d['source'])
             title_img = list(art_catalog.rglob('title_img.*'))
             if title_img:
@@ -252,10 +252,10 @@ def parse_article(file_json, date=None):
             _log.info(
                 f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} parsed and added')
         else:
-            config.CURRENT_LINK += 1
+            #config.CURRENT_LINK += 1
             _log.debug(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} parsed, NOT added')
     else:
-        config.CURRENT_LINK += 1
+        #config.CURRENT_LINK += 1
         _log.debug(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {d_file["name"]} FAILED')
 
 
@@ -274,6 +274,7 @@ def parse_articles(files):
     # urls = [link['link'] for link in links]
     # files = list(Path(Path.cwd() / 'pages').rglob('*/*.json'))
     for file in files:
+        config.CURRENT_LINK += 1
         #print(file)
         js = json.loads(Path(file).read_text())
         if js['source'] in config.urls:
