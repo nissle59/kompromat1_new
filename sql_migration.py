@@ -352,7 +352,7 @@ if __name__ == '__main__':
     #     sql_push_link(lnk)
 
     links = sql_get_links()
-    config.CURRENT_LINK = 1
+    config.CURRENT_LINK = 0
     if links:
         get_files_and_urls()
         if config.MULTITHREADED:
