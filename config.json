@@ -7,7 +7,7 @@
   },
   "SSH_TUNNELED": false,
   "MULTITHREADED": true,
-  "THREADS": 50,
+  "THREADS": 10,
   "db": {
     "user": "twpguser",
     "pass": "785564tw",
