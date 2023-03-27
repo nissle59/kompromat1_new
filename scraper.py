@@ -305,6 +305,7 @@ def clear_article(url, html):
     return {
         'title':title,
         'img':title_img,
+        'tags':"|".join(tags),
         'post':post
     }
 
@@ -314,6 +315,7 @@ def parse_article(url, date):
     resp = GET(url)
     d = None
     img = None
+    art = None
     if resp:
         local_id = int(urlparse(url).path.split('/')[-1:][0].split('-')[0])
         origin = f'{urlparse(url).scheme}://{urlparse(url).netloc}/'
@@ -326,28 +328,30 @@ def parse_article(url, date):
             'origin': origin,
             'source': url,
             'date': date,
+            'tags': art['tags'],
             'description': art['post'],
         }
 
     if d:
         if sql_add_article(d):
-            config.CURRENT_LINK += 1
             sql_set_link_downloaded(d['source'])
             if art['title_img']:
                 sql_add_image(art['title_img'])
             _log.info(
                 f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed and added')
         else:
-            _log.info(f'{url} parsed, NOT added')
+            _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed, NOT added')
     else:
-        _log.info(f'{url} FAILED')
+        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} FAILED')
 
 
 def parse_articles(links: dict):
     _log = logging.getLogger('parser.parse_articles')
     #urls = [link['link'] for link in links]
     for link in links:
+        config.CURRENT_LINK += 1
         d = parse_article(link['link'],link['date'])
+
 
 
 def multithreaded_parse_articles(links: dict):

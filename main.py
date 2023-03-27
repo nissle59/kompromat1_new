@@ -59,6 +59,7 @@ if __name__ == '__main__':
         sql_push_links(lnks)
     links = sql_get_links()
 
+    config.CURRENT_LINK = 0
     if links:
         if config.MULTITHREADED:
             multithreaded_parse_articles(links)
