@@ -158,7 +158,7 @@ def clear_article(url, html) -> dict:
     if_count = 1
     iframes = []
     for iframe in article.find_all('iframe'):
-        if 'src' in iframe.keys():
+        if iframe:
             if iframe['src'][:2] == '//':
                 iframe_src = 'https:' + iframe['src']
             else:
