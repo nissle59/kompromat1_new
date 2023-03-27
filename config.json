@@ -6,8 +6,8 @@
     "DEV_LIMIT": 10
   },
   "SSH_TUNNELED": false,
-  "MULTITHREADED": false,
-  "THREADS": 10,
+  "MULTITHREADED": true,
+  "THREADS": 5,
   "db": {
     "user": "twpguser",
     "pass": "785564tw",
