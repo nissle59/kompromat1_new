@@ -7,6 +7,7 @@ from sql import *
 from scraper import GET
 from pathlib import *
 from tqdm import tqdm
+import threading, time
 
 warnings.filterwarnings("ignore")
 
@@ -55,7 +56,7 @@ def init_logs(logname="parser"):
 def clear_article(url, html) -> dict:
     def get_img_to_base64(img_src: str):
         img_src = img_src.replace('\"', '').replace('\\', '')
-        print(img_src)
+        #print(img_src)
         if img_src[-1:] == '/':
             img_src = img_src[:-1]
         if img_src[:4] != 'data':
@@ -288,6 +289,45 @@ def get_all_links(init_catalog=Path(Path.cwd() / 'pages')):
     return links
 
 
+def multithreaded_parse_articles(links: dict):
+    _log = logging.getLogger('parser.multiparse')
+    t_s = []
+    tc = config.THREADS
+
+    l_count, l_mod = divmod(len(links), tc)
+
+    l_mod = len(links) % tc
+
+    if l_mod != 0:
+
+        l_mod = len(links) % config.THREADS
+        if l_mod == 0:
+            tc = config.THREADS
+            l_count = len(links) // tc
+
+        else:
+            tc = config.THREADS - 1
+            l_count = len(links) // tc
+
+    l_c = []
+    for i in range(0, config.THREADS):
+        _log.info(f'{i + 1} of {config.THREADS}')
+
+        l_c.append(links[l_count * i:l_count * i + l_count])
+
+    for i in range(0, config.THREADS):
+        t_s.append(
+            threading.Thread(target=parse_articles, args=(l_c[i],), daemon=True))
+    for t in t_s:
+        t.start()
+        _log.info(f'Started thread #{t_s.index(t) + 1} of {len(t_s)} with {len(l_c[t_s.index(t)])} links')
+
+    for t in t_s:
+        t.join()
+        _log.info(f'Joined thread #{t_s.index(t) + 1} of {len(t_s)} with {len(l_c[t_s.index(t)])} links')
+
+
+
 if __name__ == '__main__':
     init_logs()
     init_db(config.SSH_TUNNELED)
@@ -302,7 +342,10 @@ if __name__ == '__main__':
     links = sql_get_links()
     config.CURRENT_LINK = 1
     if links:
-        parse_articles(links)
+        if config.MULTITHREADED:
+            multithreaded_parse_articles(links)
+        else:
+            parse_articles(links)
     else:
         log.info('No articles to parse')
 
