@@ -6,7 +6,7 @@
     "DEV_LIMIT": 10
   },
   "SSH_TUNNELED": false,
-  "MULTITHREADED": true,
+  "MULTITHREADED": false,
   "THREADS": 10,
   "db": {
     "user": "twpguser",
