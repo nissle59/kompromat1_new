@@ -80,6 +80,8 @@ def sql_get_last_link_date():
 
 def sql_push_link(lnk):
     _log = logging.getLogger('parser.sql.pushlink')
+    if config.TOTAL_LINKS == 0:
+        config.TOTAL_LINKS = -1
     try:
         if lnk['date']:
             insert_query = "INSERT INTO links (name, link, date) VALUES (%s, %s, %s)"

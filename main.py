@@ -57,6 +57,7 @@ if __name__ == '__main__':
     if not config.DEV:
         lnks = get_articles_links()
         c = 0
+        config.TOTAL_LINKS = len(lnks)
         for lnk in lnks:
             c += 1
             if sql_push_link(lnk):
