@@ -55,7 +55,7 @@ if __name__ == '__main__':
     if sql_dups_delete():
         log.info(f'Duplicates deleted')
     else:
-        log.info(f'ERROR deletingdDuplicates')
+        log.info(f'ERROR deletingd duplicates')
     if not config.DEV:
         lnks = get_articles_links()
         c = 0

@@ -80,8 +80,8 @@ def get_archive_links():
     _log = logging.getLogger('parser.get_archive_links')
     links_urls = []
     path = config.archive_url[:-1]
-    logging.info(path)
-    r = GET(path, timeout=60)
+    #logging.info(path)
+    r = GET(path, timeout=1)
     if r:
         years = []
         html = r.content.decode('windows-1251')
@@ -97,7 +97,7 @@ def get_archive_links():
 
         for year in tqdm(years):
             path = config.archive_url + year
-            r = GET(path)
+            r = GET(path, timeout=1)
             if r:
                 html = r.content.decode('windows-1251')
                 soup = BeautifulSoup(html, features="html.parser")
