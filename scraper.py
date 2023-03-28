@@ -371,7 +371,7 @@ def clear_article(url, html):
 
 def parse_article(url, date):
     _log = logging.getLogger('parser.parsearticle')
-    resp = GET(url, timeout=5)
+    resp = GET(url)
     d = None
     img = None
     art = None
