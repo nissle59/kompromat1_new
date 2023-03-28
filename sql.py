@@ -68,11 +68,13 @@ def close_db(tunneled = True):
 
 
 def sql_get_last_link_date():
+    _log = logging.getLogger('parser.sql.lastdate')
     q = "select date from links where link like %s and date is not null order by date desc limit 1"
     try:
         sql_cur.execute(q,(config.base_url+'%',))
         record = sql_cur.fetchall()[0][0]
         rec_str = record.strftime("%Y-%m-%d")
+        _log.info(f'Last date of articles: {str(rec_str)}')
         return str(rec_str)
     except:
         return None
