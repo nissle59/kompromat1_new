@@ -6,7 +6,7 @@
     "DEV_LIMIT": 10,
     "LOGGING_DEBUG": false
   },
-  "PROXIED": false,
+  "PROXIED": true,
   "SSH_TUNNELED": false,
   "MULTITHREADED": true,
   "THREADS": 100,
