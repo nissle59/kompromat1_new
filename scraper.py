@@ -217,14 +217,25 @@ def get_articles_links():
 
 def clear_article(url, html):
     def get_img_to_base64(img_src: str):
-        if img_src[:4] != 'data':
+        if img_src.find('data:image') < 0:
             if img_src[:2] == '//':
                 img_src = 'https:' + img['src']
+            elif img_src[0] == '/':
+                img_src = config.base_url[:-1] + img_src
             rblob = GET(img_src)
             if rblob:
+                jpegs = ['jpg', 'jpeg']
+                try:
+                    ext = urlparse(img_src).path.split('/')[-1:][0].split('.')[-1:][0].lower()
+                except:
+                    ext = 'jpg'
                 blob = rblob.content
                 img_b64 = base64.b64encode(blob).decode()
-                img_src = 'data:image/png;base64,' + img_b64
+                if ext in jpegs:
+                    img_src = 'data:image/jpeg;base64,' + img_b64
+                else:
+                    img_src = 'data:image/png;base64,' + img_b64
+                #img_src = 'data:image/png;base64,' + img_b64
                 return img_src
             else:
                 return None

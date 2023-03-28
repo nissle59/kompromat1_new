@@ -7,7 +7,7 @@ from pathlib import *
 warnings.filterwarnings("ignore")
 
 log = logging.getLogger("parser")
-log_level = logging.DEBUG
+log_level = logging.INFO
 
 
 class MsgCounterHandler(logging.Handler):
