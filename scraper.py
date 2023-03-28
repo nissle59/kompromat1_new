@@ -365,8 +365,8 @@ def parse_article(url, date):
     if d:
         if sql_add_article(d):
             sql_set_link_downloaded(d['source'])
-            if art['title_img']:
-                sql_add_image(art['title_img'])
+            if art['img']:
+                sql_add_image(art['img'])
             _log.info(
                 f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {url} parsed and added')
         else:
