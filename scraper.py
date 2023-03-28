@@ -204,6 +204,11 @@ def get_articles_links():
     for day in res_arr:
         _log.info(f'[{cur_link} of {tot_links}] LINK ({urlparse(day).path.split("/")[-1:][0]})')
         cur_link += 1
+        ddd = None
+        while ddd is None:
+            ddd = get_day_links()
+            if ddd is None:
+                _log.info(f'trying to get page again!')
         lnks += get_day_links(day)
     return lnks
 
