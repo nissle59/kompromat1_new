@@ -131,6 +131,7 @@ def _parse_page(html, url):
             'date': urlparse(url).path.split('/')[-1:][0],
             'link': config.base_url[:-1] + link['href']
         }
+        #sql_push_link(d)
         links_urls.append(d)
     return links_urls
 

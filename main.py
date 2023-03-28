@@ -56,7 +56,14 @@ if __name__ == '__main__':
 
     if not config.DEV:
         lnks = get_articles_links()
-        sql_push_links(lnks)
+        c = 0
+        for lnk in lnks:
+            c += 1
+            if sql_push_link(lnk):
+                log.info(f'[{c} of {len(lnks)}] {lnk["name"]} added')
+            else:
+                log.info(f'[{c} of {len(lnks)}] {lnk["name"]} add ERROR')
+        #sql_push_links(lnks)
     links = sql_get_links()
 
     config.CURRENT_LINK = 0
