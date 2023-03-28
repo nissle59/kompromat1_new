@@ -42,7 +42,7 @@ def GET(url, timeout=60):
             if resp.status_code in [200, 201]:
                 return resp
             else:
-                _log.debug(f'Failed with status {resp.status_code}')
+                _log.debug(f'Failed with status {resp.status_code} - {url}')
         except:
             return None
 
@@ -58,7 +58,7 @@ def GET(url, timeout=60):
                     if resp.status_code in [200, 201]:
                         return resp
                     else:
-                        _log.debug(f'Failed with status {resp.status_code}')
+                        _log.debug(f'Failed with status {resp.status_code} - {url}')
                 except Exception as e:
                     #_log.info(f'Failed with error {e}')
                     pass
@@ -69,7 +69,7 @@ def GET(url, timeout=60):
                 if resp.status_code in [200, 201]:
                     return resp
                 else:
-                    _log.debug(f'Failed with status {resp.status_code}')
+                    _log.debug(f'Failed with status {resp.status_code} - {url}')
             except Exception as e:
                 pass
         _log.debug(f'{url} failed')
