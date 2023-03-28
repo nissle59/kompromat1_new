@@ -6,6 +6,7 @@
     "DEV_LIMIT": 10,
     "LOGGING_DEBUG": false
   },
+  "PROXIED": true,
   "SSH_TUNNELED": false,
   "MULTITHREADED": true,
   "THREADS": 100,
@@ -29,8 +30,8 @@
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 YaBrowser/23.1.5.708 Yowser/2.5 Safari/537.36"
   },
   "proxies": [
-    "user107366:olt1iy@193.3.18.238:7152",
     "SOGMeg:rTd57fsDh@188.191.164.19:9005",
+    "user107366:olt1iy@193.3.18.238:7152",
     "SOGMTS:gF56k2S@goldproxy2.linkpc.net:1109"
   ]
 }

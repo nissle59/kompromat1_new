@@ -1,4 +1,4 @@
-import configparser
+import random
 import base64
 import requests
 import locale
@@ -47,11 +47,25 @@ def GET(url, timeout=1):
             return None
 
     try:
-        resp = rs.get(url, timeout=timeout)
-        _log.debug(f'{resp.status_code}')
-        if resp.status_code in [200, 201]:
-            return resp
+        if not config.PROXIED:
+            resp = rs.get(url, timeout=timeout)
+            _log.debug(f'{resp.status_code}')
+            if resp.status_code in [200, 201]:
+                return resp
+            else:
+                random.SystemRandom().shuffle(config.proxies)
+                for p in config.proxies:
+                    try:
+                        resp = with_proxy(url, p, timeout=timeout)
+                        if resp.status_code in [200, 201]:
+                            return resp
+                        else:
+                            _log.debug(f'Failed with status {resp.status_code} - {url}')
+                    except Exception as e:
+                        #_log.info(f'Failed with error {e}')
+                        pass
         else:
+            random.SystemRandom().shuffle(config.proxies)
             for p in config.proxies:
                 try:
                     resp = with_proxy(url, p, timeout=timeout)
@@ -60,9 +74,10 @@ def GET(url, timeout=1):
                     else:
                         _log.debug(f'Failed with status {resp.status_code} - {url}')
                 except Exception as e:
-                    #_log.info(f'Failed with error {e}')
+                    # _log.info(f'Failed with error {e}')
                     pass
     except Exception as e:
+        random.SystemRandom().shuffle(config.proxies)
         for p in config.proxies:
             try:
                 resp = with_proxy(url, p, timeout=timeout)
