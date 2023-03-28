@@ -96,7 +96,7 @@ def get_archive_links():
     links_urls = []
     path = config.archive_url[:-1]
     #logging.info(path)
-    r = GET(path, timeout=1)
+    r = GET(path, timeout=5)
     if r:
         years = []
         html = r.content.decode('windows-1251')
