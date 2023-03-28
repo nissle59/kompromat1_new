@@ -166,9 +166,10 @@ def get_articles_links():
     arch = get_archive_links()
     lnks = []
     cur_link = 1
-    tot_links = len(arch)
+
     res_arr = []
     last_date = sql_get_last_link_date()
+    print(last_date)
     if last_date:
         for day in arch:
             art_dt = datetime.datetime.strptime(urlparse(day).path.split('/')[-1:][0],"%Y-%m-%d")
@@ -181,7 +182,7 @@ def get_articles_links():
                 res_arr += day
     else:
         res_arr = arch
-
+    tot_links = len(arch)
     _log.info(f'{len(res_arr)} days to parse...')
 
     for day in res_arr:
