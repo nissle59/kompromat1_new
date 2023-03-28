@@ -61,9 +61,9 @@ if __name__ == '__main__':
         for lnk in lnks:
             c += 1
             if sql_push_link(lnk):
-                log.info(f'[{c} of {len(lnks)}] {lnk["name"]} added')
+                log.info(f'[{c} of {config.TOTAL_LINKS}] {lnk["name"]} added')
             else:
-                log.info(f'[{c} of {len(lnks)}] {lnk["name"]} add ERROR')
+                log.info(f'[{c} of {config.TOTAL_LINKS}] {lnk["name"]} add ERROR')
         #sql_push_links(lnks)
     links = sql_get_links()
 
