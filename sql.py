@@ -142,7 +142,7 @@ def sql_get_links():
         sql_cur.execute(select_query, (config.base_url + "%",))
         records = sql_cur.fetchall()
     config.TOTAL_LINKS = len(records)
-    print(len(config.TOTAL_LINKS))
+    print(config.TOTAL_LINKS)
     if config.TOTAL_LINKS > 0:
         return records
     else:
