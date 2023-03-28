@@ -178,8 +178,8 @@ def get_articles_links():
             else:
                 last_dt = last_date
             time_diff = (last_dt - art_dt).days
-            if time_diff >= 1:
-                res_arr += day
+            if time_diff <= 1:
+                res_arr.append(day)
     else:
         res_arr = arch
     tot_links = len(arch)
