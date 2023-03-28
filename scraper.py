@@ -175,6 +175,8 @@ def get_day_links(url):
                 html = r.content.decode('windows-1251')
                 links_urls += _parse_page(html, url)
         return links_urls
+    else:
+        return None
 
 
 def get_articles_links():
@@ -205,7 +207,7 @@ def get_articles_links():
         _log.info(f'[{cur_link} of {tot_links}] LINK ({urlparse(day).path.split("/")[-1:][0]})')
         cur_link += 1
         ddd = None
-        while ddd is None:
+        while not(ddd):
             ddd = get_day_links(day)
             if ddd is None:
                 _log.info(f'trying to get page again!')
