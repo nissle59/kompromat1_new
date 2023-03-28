@@ -52,8 +52,10 @@ if __name__ == '__main__':
     init_logs()
     init_db(config.SSH_TUNNELED)
     sql_version()
-    sql_dups_delete()
-
+    if sql_dups_delete():
+        log.info(f'Duplicates deleted')
+    else:
+        log.info(f'ERROR deletingdDuplicates')
     if not config.DEV:
         lnks = get_articles_links()
         c = 0
@@ -76,5 +78,8 @@ if __name__ == '__main__':
     else:
         log.info('No articles to parse')
     # Here will be uploader
-    sql_dups_delete()
+    if sql_dups_delete():
+        log.info(f'Duplicates deleted')
+    else:
+        log.info(f'ERROR deletingdDuplicates')
     close_db(config.SSH_TUNNELED)
