@@ -37,7 +37,7 @@ def GET(url, timeout=1):
             'https': 'http://' + proxy
         }
         try:
-            #_log.info(f'Try to {url} with proxy {px["https"]}')
+            _log.debug(f'Try to {url} with proxy {px["https"]}')
             resp = rs.get(url, proxies=px, timeout=timeout)
             if resp.status_code in [200, 201]:
                 return resp
@@ -96,7 +96,7 @@ def get_archive_links():
     links_urls = []
     path = config.archive_url[:-1]
     #logging.info(path)
-    r = GET(path, timeout=5)
+    r = GET(path)
     if r:
         years = []
         html = r.content.decode('windows-1251')
@@ -112,7 +112,7 @@ def get_archive_links():
 
         for year in tqdm(years):
             path = config.archive_url + year
-            r = GET(path, timeout=1)
+            r = GET(path)
             if r:
                 html = r.content.decode('windows-1251')
                 soup = BeautifulSoup(html, features="html.parser")
