@@ -68,9 +68,9 @@ def close_db(tunneled = True):
 
 
 def sql_get_last_link_date():
-    q = "select date from links order by date desc limit 1;"
+    q = "select date from links where source like %s order by date desc limit 1;"
     try:
-        sql_cur.execute(q)
+        sql_cur.execute(q,(config.base_url+'%',))
         record = sql_cur.fetchall()[0][0]
         rec_str = record.strftime("%Y-%m-%d")
         return str(rec_str)

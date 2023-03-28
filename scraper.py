@@ -153,7 +153,7 @@ def get_day_links(url):
         # links_urls = _parse_page(html)
         for page in range(1, pages_count):
             path = url + '?pg=' + str(page)
-            logging.info(f'--- page #{page + 1}')
+            _log.info(f'--- page #{page + 1}')
             r = GET(path)
             if r:
                 html = r.content.decode('windows-1251')
@@ -167,7 +167,24 @@ def get_articles_links():
     lnks = []
     cur_link = 1
     tot_links = len(arch)
-    for day in arch:
+    res_arr = []
+    last_date = sql_get_last_link_date()
+    if last_date:
+        for day in arch:
+            art_dt = datetime.datetime.strptime(urlparse(day).path.split('/')[-1:][0],"%Y-%m-%d")
+            if isinstance(last_date, str):
+                last_dt = datetime.datetime.strptime(last_date,"%Y-%m-%d")
+            else:
+                last_dt = last_date
+            time_diff = (last_dt - art_dt).days
+            if time_diff <= 1:
+                res_arr += day
+    else:
+        res_arr = arch
+
+    _log.info(f'{len(res_arr)} days to parse...')
+
+    for day in res_arr:
         _log.info(f'[{cur_link} of {tot_links}] LINK ({urlparse(day).path.split("/")[-1:][0]})')
         cur_link += 1
         lnks += get_day_links(day)
@@ -334,10 +351,14 @@ def parse_article(url, date):
             'name': art['title'],
             'origin': origin,
             'source': url,
-            'date': date,
-            'tags': art['tags'],
-            'description': art['post'],
+            #'date': date,
+            #'tags': art['tags'],
+            'description': art['post']
         }
+        if art['tags']:
+            d.update({'tags':art['tags']})
+        if date:
+            d.update({'date':date})
 
     if d:
         if sql_add_article(d):
@@ -357,7 +378,7 @@ def parse_articles(links: dict):
     #urls = [link['link'] for link in links]
     for link in links:
         config.CURRENT_LINK += 1
-        d = parse_article(link['link'],link['date'])
+        parse_article(link['link'],link['date'])
 
 
 
