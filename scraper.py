@@ -206,10 +206,10 @@ def get_articles_links():
         cur_link += 1
         ddd = None
         while ddd is None:
-            ddd = get_day_links()
+            ddd = get_day_links(day)
             if ddd is None:
                 _log.info(f'trying to get page again!')
-        lnks += get_day_links(day)
+        lnks += ddd
     return lnks
 
 
