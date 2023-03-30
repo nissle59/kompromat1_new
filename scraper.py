@@ -256,8 +256,7 @@ def clear_article(url, html):
         return None
 
     try:
-        t_i_div = article.select_one('div.img_wrap')
-        t_i_div.extract()
+        t_i_div = article.select_one('div.img_wrap').extract()
         title_img_src = t_i_div.find('img')['src']
         r_img = GET(title_img_src)
         if r_img:
@@ -293,7 +292,7 @@ def clear_article(url, html):
     except Exception as e:
         _log.debug('video: '+ str(e))
     article.attrs = {}
-    print(article.prettify())
+
     img_links = []
     try:
         for img in article.find_all('img'):
@@ -309,7 +308,7 @@ def clear_article(url, html):
         _log.debug('images: ' + str(e))
 
     try:
-        info = article.select_one('div.img_div').extract()
+        info = t_i_div.select_one('div.img_div').extract()
     except:
         info = None
 
@@ -318,7 +317,7 @@ def clear_article(url, html):
             clr.extract()
     except:
         pass
-
+    print(article.prettify())
     try:
         for div in article.find_all('div'):
             div.attrs = {}
