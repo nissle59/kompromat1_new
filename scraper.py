@@ -405,11 +405,7 @@ def clear_article(url, html):
     #print(f'post: {post}')
     if pend:
         post += pend.prettify().strip(' \n')
-    try:
-        lenpost = len(post)
-    except:
-        lenpost = 0
-    _log.info(f'post length is {lenpost}')
+
     d = {
             'title':title,
             'img':title_img,
@@ -427,7 +423,7 @@ def clear_article(url, html):
 def parse_article(url, date):
     _log = logging.getLogger('parser.parsearticle')
     resp = GET(url)
-    _log.info(f'Try to parse - {url}')
+    _log.debug(f'Try to parse - {url}')
     url_short = urlparse(url).path.split("/")[-1:][0]
     d = None
     img = None
