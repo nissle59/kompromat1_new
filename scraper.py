@@ -403,7 +403,7 @@ def clear_article(url, html):
     if post:
         return d
     else:
-        _log.debug(html)
+        _log.info(html)
         return None
 
 
