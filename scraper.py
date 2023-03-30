@@ -403,7 +403,7 @@ def clear_article(url, html):
     if post:
         return d
     else:
-        _log.debug(json.dumps(d,ensure_ascii=False,indent=4))
+        _log.debug(html)
         return None
 
 
