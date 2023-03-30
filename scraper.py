@@ -401,7 +401,7 @@ def clear_article(url, html):
         pend = None
     print(f'pend: {pend}')
 
-    post = article.prettify().replace('<div>', '').replace('</div>', '').strip(' \n')
+    post = article.prettify().replace('<div>', '').replace('</div>', '').replace('\n',' ').strip()
     print(f'post: {post}')
     if pend:
         post += pend.prettify().strip(' \n')
