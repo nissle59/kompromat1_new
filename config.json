@@ -9,7 +9,7 @@
   "PROXIED": false,
   "SSH_TUNNELED": false,
   "MULTITHREADED": true,
-  "THREADS": 20,
+  "THREADS": 100,
   "db": {
     "user": "twpguser",
     "pass": "785564tw",
