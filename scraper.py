@@ -397,14 +397,18 @@ def parse_article(url, date):
             d.update({'date':date})
 
     if d:
-        if sql_add_article(d):
-            sql_set_link_downloaded(d['source'])
-            if art['img']:
-                sql_add_image(art['img'])
-            _log.info(
-                f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [SUCCESS] {url_short}')
+        if d['description']:
+            if sql_add_article(d):
+                sql_set_link_downloaded(d['source'])
+                if art['img']:
+                    sql_add_image(art['img'])
+                _log.info(
+                    f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [SUCCESS] {url_short}')
+            else:
+                _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [NORMAL] {url_short} parsed, NOT added')
         else:
-            _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [NORMAL] {url_short} parsed, NOT added')
+            _log.info(
+                f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [ERROR] {url_short} no desc in dict')
     else:
         _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [FAILED] {url_short}')
 
