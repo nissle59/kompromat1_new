@@ -8,7 +8,6 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from sshtunnel import SSHTunnelForwarder
 
-
 tunnel = None
 sql_conn = None
 sql_cur = None
@@ -16,7 +15,7 @@ sql_cur = None
 log = logging.getLogger("parser")
 
 
-def init_db(tunneled = True):
+def init_db(tunneled=True):
     global tunnel
     global sql_conn
     global sql_cur
@@ -30,12 +29,12 @@ def init_db(tunneled = True):
         )
         tunnel.start()
         sql_conn = psycopg2.connect(
-                user=base.db_user,
-                password=base.db_password,
-                host=base.db_host,
-                port=tunnel.local_bind_port,
-                database=base.db_name,
-            )
+            user=base.db_user,
+            password=base.db_password,
+            host=base.db_host,
+            port=tunnel.local_bind_port,
+            database=base.db_name,
+        )
     else:
         sql_conn = psycopg2.connect(
             user=base.db_user,
@@ -48,7 +47,7 @@ def init_db(tunneled = True):
     sql_cur = sql_conn.cursor(cursor_factory=DictCursor)
 
 
-def close_db(tunneled = True):
+def close_db(tunneled=True):
     _log = logging.getLogger("parser.sql.destructor")
     global tunnel
     global sql_conn
@@ -71,7 +70,7 @@ def sql_get_last_link_date():
     _log = logging.getLogger('parser.sql.lastdate')
     q = "select date from links where link like %s and date is not null order by date desc limit 1"
     try:
-        sql_cur.execute(q,(config.base_url+'%',))
+        sql_cur.execute(q, (config.base_url + '%',))
         record = sql_cur.fetchall()[0][0]
         rec_str = record.strftime("%Y-%m-%d")
         _log.info(f'Last date of articles: {str(rec_str)}')
@@ -92,11 +91,13 @@ def sql_push_link(lnk):
             insert_query = "INSERT INTO links (name, link) VALUES (%s, %s)"
             sql_cur.execute(insert_query, (lnk['name'], lnk['link']))
         sql_conn.commit()
-        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] ({config.CURRENT_LINK} of {config.TOTAL_LINKS}) [{lnk["name"]}] Ok!')
+        _log.info(
+            f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] ({config.CURRENT_LINK} of {config.TOTAL_LINKS}) [{lnk["name"]}] Ok!')
         config.CURRENT_LINK += 1
         return True
     except Exception as e:
-        _log.error(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] ({config.CURRENT_LINK} of {config.TOTAL_LINKS}) [{lnk["name"]}] ERROR: {e}')
+        _log.error(
+            f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] ({config.CURRENT_LINK} of {config.TOTAL_LINKS}) [{lnk["name"]}] Record already exists')
         config.CURRENT_LINK += 1
         sql_conn.rollback()
         return False
@@ -106,22 +107,22 @@ def sql_push_links(lnks: list):
     def push_link(lnk):
         try:
             insert_query = "INSERT INTO links (name, link, date) VALUES (%s, %s, %s)"
-            sql_cur.execute(insert_query,(lnk['name'],lnk['link'],lnk['date']))
+            sql_cur.execute(insert_query, (lnk['name'], lnk['link'], lnk['date']))
             sql_conn.commit()
             return True
         except:
             return False
+
     _log = logging.getLogger('parser.sql.pushlinks')
     values = []
     try:
         insert_query = "INSERT INTO links (name, link, date) VALUES (%s, %s, %s)"
         for lnk in lnks:
-            #print(json.dumps(lnk,ensure_ascii=False,indent=4))
-            values.append((lnk['name'],lnk['link'],lnk['date']))
+            values.append((lnk['name'], lnk['link'], lnk['date']))
         sql_cur.executemany(insert_query, values)
         sql_conn.commit()
     except Exception as e:
-        _log.error(e)
+        _log.debug(e)
         sql_conn.rollback()
         for lnk in lnks:
             if push_link(lnk):
@@ -132,9 +133,9 @@ def sql_push_links(lnks: list):
 
 def sql_get_links():
     _log = logging.getLogger('parser.sql.get_links')
-    select_query = "SELECT * FROM links WHERE downloaded = False AND link LIKE %s" #AND uploaded = False"
+    select_query = "SELECT * FROM links WHERE downloaded = False AND link LIKE %s"  # AND uploaded = False"
     if DEV:
-        select_query = f"SELECT * FROM links WHERE downloaded = False AND link LIKE %s LIMIT {DEV_LIMIT}" #AND uploaded = False LIMIT 50"
+        select_query = f"SELECT * FROM links WHERE downloaded = False AND link LIKE %s LIMIT {DEV_LIMIT}"  # AND uploaded = False LIMIT 50"
         _log.info(f'DEV mode! with DEV_LIMIT = {DEV_LIMIT}')
     try:
         sql_cur.execute(select_query, (config.base_url + "%",))
@@ -155,7 +156,7 @@ def sql_set_link_downloaded(link):
     _log = logging.getLogger('parser.sql.set_link_downloaded')
     try:
         q = "UPDATE links SET downloaded = %s WHERE link = %s"
-        sql_cur.execute(q,(True,link))
+        sql_cur.execute(q, (True, link))
         sql_conn.commit()
         return True
     except Exception as e:
@@ -169,7 +170,7 @@ def sql_add_article(d: dict):
     try:
         if ('date' in d.keys()) and ('tags' in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, date, description, tags) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            values = (d['local_id'],d['name'],d['origin'],d['source'],d['date'],d['description'],d['tags'])
+            values = (d['local_id'], d['name'], d['origin'], d['source'], d['date'], d['description'], d['tags'])
         elif ('date' in d.keys()) and ('tags' not in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, date, description) VALUES (%s, %s, %s, %s, %s, %s)"
             values = (d['local_id'], d['name'], d['origin'], d['source'], d['date'], d['description'])
@@ -179,7 +180,7 @@ def sql_add_article(d: dict):
         elif ('date' not in d.keys()) and ('tags' not in d.keys()):
             q = "INSERT INTO articles (local_id, name, origin, source, description) VALUES (%s, %s, %s, %s, %s, %s)"
             values = (d['local_id'], d['name'], d['origin'], d['source'], d['description'])
-        sql_cur.execute(q,values)
+        sql_cur.execute(q, values)
         sql_conn.commit()
         if sql_set_link_downloaded(d['source']):
             return True

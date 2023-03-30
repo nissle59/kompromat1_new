@@ -2,7 +2,8 @@ import logging
 import warnings
 from scraper import *
 from pathlib import *
-#from config import
+
+# from config import
 
 warnings.filterwarnings("ignore")
 
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     if sql_dups_delete():
         log.info(f'Duplicates deleted')
     else:
-        log.info(f'ERROR deletingd duplicates')
+        log.info(f'ERROR deleting duplicates')
     if not config.DEV:
         lnks = get_articles_links()
         c = 0
@@ -66,7 +67,6 @@ if __name__ == '__main__':
                 log.info(f'[{c} of {config.TOTAL_LINKS}] {lnk["name"]} added')
             else:
                 log.info(f'[{c} of {config.TOTAL_LINKS}] {lnk["name"]} add ERROR')
-        #sql_push_links(lnks)
     links = sql_get_links()
 
     config.CURRENT_LINK = 0
@@ -77,7 +77,7 @@ if __name__ == '__main__':
             parse_articles(links)
     else:
         log.info('No articles to parse')
-    # Here will be uploader
+
     if sql_dups_delete():
         log.info(f'Duplicates deleted')
     else:
