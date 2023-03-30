@@ -154,7 +154,7 @@ def _parse_page(html, url):
 def get_day_links(url):
     _log = logging.getLogger('parser.get_day_links')
     path = url
-    _log.info(f'--- page #1')
+    #_log.info(f'--- page #1')
     r = GET(path)
     if r:
         html = r.content.decode('windows-1251')
@@ -164,10 +164,10 @@ def get_day_links(url):
         if pages:
             pages_count = int(pages.text.split(' ')[1].strip('():')) - 1
         else:
-            pages_count = 0
+            pages_count = 1
         links_urls = []
         # links_urls = _parse_page(html)
-        for page in range(1, pages_count):
+        for page in range(0, pages_count-1):
             path = url + '?pg=' + str(page)
             _log.info(f'--- page #{page + 1}')
             r = GET(path)
