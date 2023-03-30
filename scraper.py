@@ -281,9 +281,9 @@ def clear_article(url, html):
         tags = base.find_all('a', {'class': 'article-tag'})
         for tag in tags:
             tags[tags.index(tag)] = tag.text
-            print(f'tags: {"|".join(tags)}')
     except:
         tags = []
+    print(f'tags: {"|".join(tags)}')
     try:
         article.find('script').extract()
     except Exception as e:
