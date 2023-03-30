@@ -245,10 +245,14 @@ def clear_article(url, html):
             return img_src
 
     _log = logging.getLogger('parser.clear_article')
-    soup = BeautifulSoup(html, features='html.parser')
-    base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
-    title = str(base.find('h1').contents[0])
-    article = base.find('div', {'class': 'articles_one'})
+    try:
+        soup = BeautifulSoup(html, features='html.parser')
+        base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
+        title = str(base.find('h1').contents[0])
+        article = base.find('div', {'class': 'articles_one'})
+    except Exception as e:
+        _log.info(e)
+        return None
 
     try:
         t_i_div = article.find('div', {'class': 'img_wrap'})
