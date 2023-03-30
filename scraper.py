@@ -250,13 +250,13 @@ def clear_article(url, html):
         base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
         title = str(base.find('h1').contents[0])
         print(f'title: {title}')
-        article = base.find('div', {'class': 'articles_one'})
+        article = base.select('div.articles_one')[0]
     except Exception as e:
         _log.info(e)
         return None
 
     try:
-        t_i_div = article.find('div', {'class': 'img_wrap'})
+        t_i_div = article.select('div.img_wrap')[0]
         t_i_div.extract()
         title_img_src = t_i_div.find('img')['src']
         r_img = GET(title_img_src)
@@ -278,7 +278,7 @@ def clear_article(url, html):
 
 
     try:
-        tags = base.find_all('a', {'class': 'article-tag'})
+        tags = base.select('a.article-tag')
         for tag in tags:
             tags[tags.index(tag)] = tag.text
     except:
@@ -308,12 +308,12 @@ def clear_article(url, html):
         _log.debug('images: ' + str(e))
 
     try:
-        info = article.find('div', {'class': 'img_div'}).extract()
+        info = article.select_one('div.img_div').extract()
     except:
         info = None
 
     try:
-        for clr in article.find_all('div', {'class': 'clear'}):
+        for clr in article.select('div.clear'):
             clr.extract()
     except:
         pass
@@ -327,7 +327,7 @@ def clear_article(url, html):
         _log.debug('div first: ' + str(e))
 
     try:
-        for a in article.find_all('a', {'class': 'link'}):
+        for a in article.select('a.link'):
             a.replaceWithChildren()
     except Exception as e:
         _log.debug('links: ' + str(e))
