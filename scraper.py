@@ -420,6 +420,7 @@ def clear_article(url, html):
 def parse_article(url, date):
     _log = logging.getLogger('parser.parsearticle')
     resp = GET(url)
+    _log.info(f'Try to parse - {url}')
     url_short = urlparse(url).path.split("/")[-1:][0]
     d = None
     img = None
