@@ -209,6 +209,7 @@ def get_articles_links():
         ddd = None
         while not(ddd):
             ddd = get_day_links(day)
+            print(ddd)
             if ddd is None:
                 _log.info(f'trying to get page again!')
         lnks += ddd
