@@ -8,7 +8,7 @@
   },
   "PROXIED": false,
   "SSH_TUNNELED": false,
-  "MULTITHREADED": false,
+  "MULTITHREADED": true,
   "THREADS": 20,
   "db": {
     "user": "twpguser",
