@@ -356,7 +356,6 @@ def clear_article(url, html):
             element.extract()
     except Exception as e:
         _log.debug('br: ' + str(e))
-    print(article.prettify())
     iframes = []
     try:
         if_count = 1
@@ -381,12 +380,12 @@ def clear_article(url, html):
     except Exception as e:
         _log.debug('iframes: ' + str(e))
 
-    try:
-        v = soup.find_all('div')
-        for div in v:
-            div.unwrap()
-    except Exception as e:
-        _log.debug('div second: ' + str(e))
+    # try:
+    #     v = soup.find_all('div')
+    #     for div in v:
+    #         div.unwrap()
+    # except Exception as e:
+    #     _log.debug('div second: ' + str(e))
     try:
         v = soup.find_all('span')
         for span in v:
@@ -417,7 +416,7 @@ def clear_article(url, html):
             'tags':"|".join(tags),
             'post':post
         }
-
+    return None
     if post:
         return d
     else:
