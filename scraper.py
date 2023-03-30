@@ -403,13 +403,13 @@ def clear_article(url, html):
     print(f'pend: {pend}')
 
     post = article.prettify().replace('<div>', '').replace('</div>', '').strip(' \n')
+    print(f'post: {post}')
     if pend:
         post += pend.prettify().strip(' \n')
     try:
         lenpost = len(post)
     except:
         lenpost = 0
-    print(f'post: {post}')
     _log.info(f'post length is {lenpost}')
     d = {
             'title':title,
