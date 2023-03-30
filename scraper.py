@@ -266,9 +266,12 @@ def clear_article(url, html):
     except:
         title_img = None
 
-    tags = base.find_all('a', {'class': 'article-tag'})
-    for tag in tags:
-        tags[tags.index(tag)] = tag.text
+    try:
+        tags = base.find_all('a', {'class': 'article-tag'})
+        for tag in tags:
+            tags[tags.index(tag)] = tag.text
+    except:
+        pass
     try:
         article.find('script').extract()
     except:
@@ -279,76 +282,105 @@ def clear_article(url, html):
         pass
     article.attrs = {}
     img_links = []
-    for img in article.find_all('img'):
-        # del img['width']
-        img_res = get_img_to_base64(img['src'])
-        if img_res:
-            img.attrs = {}
-            img['src'] = img_res
-        else:
-            img.extract()
-        # img_links.append(img['src'])
+    try:
+        for img in article.find_all('img'):
+            # del img['width']
+            img_res = get_img_to_base64(img['src'])
+            if img_res:
+                img.attrs = {}
+                img['src'] = img_res
+            else:
+                img.extract()
+            # img_links.append(img['src'])
+    except:
+        pass
 
     try:
         info = article.find('div', {'class': 'img_div'}).extract()
     except:
         pass
 
-    for clr in article.find_all('div', {'class': 'clear'}):
-        try:
+    try:
+        for clr in article.find_all('div', {'class': 'clear'}):
             clr.extract()
-        except:
-            pass
+    except:
+        pass
 
-    for div in article.find_all('div'):
-        div.attrs = {}
-        div.name = 'p'
-        # del div['style']
+    try:
+        for div in article.find_all('div'):
+            div.attrs = {}
+            div.name = 'p'
+            # del div['style']
+    except:
+        pass
 
-    for a in article.find_all('a', {'class': 'link'}):
-        a.replaceWithChildren()
-    for p in article.find_all('p'):
-        p.attrs = {}
-    for em in article.find_all('em'):
-        em.replaceWithChildren()
-    for strong in article.find_all('strong'):
-        strong.replaceWithChildren()
-
-    for element in article(text=lambda text: isinstance(text, Comment)):
-        element.extract()
+    try:
+        for a in article.find_all('a', {'class': 'link'}):
+            a.replaceWithChildren()
+    except:
+        pass
+    try:
+        for p in article.find_all('p'):
+            p.attrs = {}
+    except:
+        pass
+    try:
+        for em in article.find_all('em'):
+            em.replaceWithChildren()
+    except:
+        pass
+    try:
+        for strong in article.find_all('strong'):
+            strong.replaceWithChildren()
+    except:
+        pass
+    try:
+        for element in article(text=lambda text: isinstance(text, Comment)):
+            element.extract()
+    except:
+        pass
     try:
         for element in article.find_all('br'):
             element.extract()
     except:
         pass
 
-    if_count = 1
     iframes = []
-    for iframe in article.find_all('iframe'):
-        if iframe:
+    try:
+        if_count = 1
+        for iframe in article.find_all('iframe'):
+            if iframe:
+                try:
+                    if iframe['src'][:2] == '//':
+                        iframe_src = 'https:' + iframe['src']
+                    else:
+                        iframe_src = iframe['src']
+                    a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
+                                      features="html.parser")
+                    a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
+                    iframes.append(a.a)
+                    if_count += 1
+                except:
+                    pass
             try:
-                if iframe['src'][:2] == '//':
-                    iframe_src = 'https:' + iframe['src']
-                else:
-                    iframe_src = iframe['src']
-                a = BeautifulSoup(f'<a target="_blank">| Источник №{if_count} |</a>',
-                                  features="html.parser")
-                a.a['href'] = iframe_src.replace('\"', '').replace('\\', '')
-                iframes.append(a.a)
-                if_count += 1
+                iframe.extract()
             except:
                 pass
-        try:
-            iframe.extract()
-        except:
-            pass
+    except:
+        pass
 
-    v = soup.find_all('div')
-    for div in v:
-        div.unwrap()
-    v = soup.find_all('span')
-    for span in v:
-        span.unwrap()
+    try:
+        v = soup.find_all('div')
+        for div in v:
+            div.unwrap()
+    except:
+        pass
+    try:
+        v = soup.find_all('span')
+        for span in v:
+            span.unwrap()
+    except:
+        pass
 
     if len(iframes) > 0:
         pend = BeautifulSoup('<p></p>', features="html.parser")
@@ -361,12 +393,18 @@ def clear_article(url, html):
     if pend:
         post += pend.prettify().strip(' \n')
 
-    return {
-        'title':title,
-        'img':title_img,
-        'tags':"|".join(tags),
-        'post':post
-    }
+    d = {
+            'title':title,
+            'img':title_img,
+            'tags':"|".join(tags),
+            'post':post
+        }
+
+    if post:
+        return d
+    else:
+        _log.debug(json.dumps(d,ensure_ascii=False,indent=4))
+        return None
 
 
 def parse_article(url, date):

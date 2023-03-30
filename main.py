@@ -1,5 +1,7 @@
 import logging
 import warnings
+
+import config
 from scraper import *
 from pathlib import *
 
@@ -9,6 +11,9 @@ warnings.filterwarnings("ignore")
 
 log = logging.getLogger("parser")
 log_level = logging.INFO
+
+if config.LOGGING_DEBUG:
+    log_level = logging.DEBUG
 
 
 class MsgCounterHandler(logging.Handler):

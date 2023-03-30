@@ -4,7 +4,7 @@
   "DEV": {
     "DEV": false,
     "DEV_LIMIT": 10,
-    "LOGGING_DEBUG": false
+    "LOGGING_DEBUG": true
   },
   "PROXIED": false,
   "SSH_TUNNELED": false,
