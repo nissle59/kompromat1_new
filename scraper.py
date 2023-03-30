@@ -317,7 +317,7 @@ def clear_article(url, html):
             clr.extract()
     except:
         pass
-    print(article.prettify())
+
     try:
         for div in article.find_all('div'):
             div.attrs = {}
@@ -325,7 +325,7 @@ def clear_article(url, html):
             # del div['style']
     except Exception as e:
         _log.debug('div first: ' + str(e))
-
+    print(article.prettify())
     try:
         for a in article.select('a.link'):
             a.replaceWithChildren()
