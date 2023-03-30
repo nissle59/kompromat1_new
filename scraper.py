@@ -249,6 +249,7 @@ def clear_article(url, html):
         soup = BeautifulSoup(html, features='html.parser')
         base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
         title = str(base.find('h1').contents[0])
+        print(f'title: {title}')
         article = base.find('div', {'class': 'articles_one'})
     except Exception as e:
         _log.info(e)
@@ -266,16 +267,21 @@ def clear_article(url, html):
                 'b_data': r_img.content,
                 'ext': ext
             }
+            print('title_img Ok')
         else:
+            print('title_img Not Ok')
             title_img = None
             _log.info(f'Can\'t load title img ({title_img_src})')
     except:
         title_img = None
+        print('title_img not exists')
+
 
     try:
         tags = base.find_all('a', {'class': 'article-tag'})
         for tag in tags:
             tags[tags.index(tag)] = tag.text
+            print(f'tags: {"|".join(tags)}')
     except:
         tags = []
     try:
@@ -394,6 +400,7 @@ def clear_article(url, html):
             pend.append(iframe)
     else:
         pend = None
+    print(f'pend: {pend}')
 
     post = article.prettify().replace('<div>', '').replace('</div>', '').strip(' \n')
     if pend:
@@ -402,6 +409,7 @@ def clear_article(url, html):
         lenpost = len(post)
     except:
         lenpost = 0
+    print(f'post: {post}')
     _log.info(f'post length is {lenpost}')
     d = {
             'title':title,
