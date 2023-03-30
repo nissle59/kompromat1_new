@@ -167,7 +167,7 @@ def get_day_links(url):
             pages_count = 1
         links_urls = []
         # links_urls = _parse_page(html)
-        for page in range(0, pages_count-1):
+        for page in range(0, pages_count):
             path = url + '?pg=' + str(page)
             _log.info(f'--- page #{page + 1}')
             r = GET(path)
