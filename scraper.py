@@ -28,7 +28,7 @@ rs.proxies = config.proxies[config.iter_proxy]
 rs.verify = False
 
 
-def GET(url, timeout=1):
+def GET(url, timeout=5):
     _log = logging.getLogger('parser.GET')
 
     def with_proxy(url, proxy, timeout=timeout):
