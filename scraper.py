@@ -372,6 +372,7 @@ def clear_article(url, html):
 def parse_article(url, date):
     _log = logging.getLogger('parser.parsearticle')
     resp = GET(url)
+    url_short = urlparse(url).path.split("/")[-1:][0]
     d = None
     img = None
     art = None
@@ -401,11 +402,11 @@ def parse_article(url, date):
             if art['img']:
                 sql_add_image(art['img'])
             _log.info(
-                f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {urlparse(url).path.split(["/"][-1:][0])} SUCCESS')
+                f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [SUCCESS] {url_short}')
         else:
-            _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {urlparse(url).path.split(["/"][-1:][0])} parsed, NOT added')
+            _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [NORMAL] {url_short} parsed, NOT added')
     else:
-        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- {urlparse(url).path.split(["/"][-1:][0])} FAILED')
+        _log.info(f'[{round(config.CURRENT_LINK / config.TOTAL_LINKS * 100, 2)}%] {config.CURRENT_LINK} of {config.TOTAL_LINKS} -=- [FAILED] {url_short}')
 
 
 def parse_articles(links: dict):
