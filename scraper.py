@@ -250,13 +250,13 @@ def clear_article(url, html):
         base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
         title = str(base.find('h1').contents[0])
         print(f'title: {title}')
-        article = base.select('div.articles_one')[0]
+        article = soup.select_one('.articles_one')
     except Exception as e:
         _log.info(e)
         return None
 
     try:
-        t_i_div = article.select('div.img_wrap')[0]
+        t_i_div = article.select_one('div.img_wrap')
         t_i_div.extract()
         title_img_src = t_i_div.find('img')['src']
         r_img = GET(title_img_src)
@@ -293,6 +293,7 @@ def clear_article(url, html):
     except Exception as e:
         _log.debug('video: '+ str(e))
     article.attrs = {}
+    print(article.prettify())
     img_links = []
     try:
         for img in article.find_all('img'):
