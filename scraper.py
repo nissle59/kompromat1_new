@@ -273,7 +273,7 @@ def clear_article(url, html):
         for tag in tags:
             tags[tags.index(tag)] = tag.text
     except:
-        pass
+        tags = []
     try:
         article.find('script').extract()
     except:
@@ -300,7 +300,7 @@ def clear_article(url, html):
     try:
         info = article.find('div', {'class': 'img_div'}).extract()
     except:
-        pass
+        info = None
 
     try:
         for clr in article.find_all('div', {'class': 'clear'}):
@@ -435,6 +435,8 @@ def parse_article(url, date):
             d.update({'tags':art['tags']})
         if date:
             d.update({'date':date})
+    else:
+        _log.info(f'Cant load page {url}')
 
     if d:
         if d['description']:
