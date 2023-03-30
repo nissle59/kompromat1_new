@@ -111,6 +111,7 @@ def get_archive_links():
                 years.append(sibling.contents[0])
 
         for year in tqdm(years):
+            idx = years.index(year)+1
             path = config.archive_url + year
             r = GET(path)
             if r:
@@ -118,6 +119,7 @@ def get_archive_links():
                 soup = BeautifulSoup(html, features="html.parser")
                 base = soup.find('div', {'id': 'content'}).find('div', {'class': 'wrap'}).find('div', {'id': 'col-1'})
                 months = base.find_all('div', {'class': 'month'})
+                _log.info(f'[{idx} of {len(years)}] Year {year}...')
                 for month in months:
                     month_name = month.find('h4').contents[0].split(' ')[0].strip()
                     table = month.find('table')
