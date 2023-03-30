@@ -280,12 +280,12 @@ def clear_article(url, html):
         tags = []
     try:
         article.find('script').extract()
-    except:
-        pass
+    except Exception as e:
+        _log.info('script: '+e)
     try:
         video = article.find('video').extract()
-    except:
-        pass
+    except Exception as e:
+        _log.info('video: '+e)
     article.attrs = {}
     img_links = []
     try:
@@ -298,8 +298,8 @@ def clear_article(url, html):
             else:
                 img.extract()
             # img_links.append(img['src'])
-    except:
-        pass
+    except Exception as e:
+        _log.info('images: ' + e)
 
     try:
         info = article.find('div', {'class': 'img_div'}).extract()
@@ -317,39 +317,39 @@ def clear_article(url, html):
             div.attrs = {}
             div.name = 'p'
             # del div['style']
-    except:
-        pass
+    except Exception as e:
+        _log.info('div first: ' + e)
 
     try:
         for a in article.find_all('a', {'class': 'link'}):
             a.replaceWithChildren()
-    except:
-        pass
+    except Exception as e:
+        _log.info('links: ' + e)
     try:
         for p in article.find_all('p'):
             p.attrs = {}
-    except:
-        pass
+    except Exception as e:
+        _log.info('p: ' + e)
     try:
         for em in article.find_all('em'):
             em.replaceWithChildren()
-    except:
-        pass
+    except Exception as e:
+        _log.info('em: ' + e)
     try:
         for strong in article.find_all('strong'):
             strong.replaceWithChildren()
-    except:
-        pass
+    except Exception as e:
+        _log.info('strong: ' + e)
     try:
         for element in article(text=lambda text: isinstance(text, Comment)):
             element.extract()
-    except:
-        pass
+    except Exception as e:
+        _log.info('comments: ' + e)
     try:
         for element in article.find_all('br'):
             element.extract()
-    except:
-        pass
+    except Exception as e:
+        _log.info('br: ' + e)
 
     iframes = []
     try:
@@ -372,21 +372,21 @@ def clear_article(url, html):
                 iframe.extract()
             except:
                 pass
-    except:
-        pass
+    except Exception as e:
+        _log.info('iframes: ' + e)
 
     try:
         v = soup.find_all('div')
         for div in v:
             div.unwrap()
-    except:
-        pass
+    except Exception as e:
+        _log.info('div second: ' + e)
     try:
         v = soup.find_all('span')
         for span in v:
             span.unwrap()
-    except:
-        pass
+    except Exception as e:
+        _log.info('span: ' + e)
 
     if len(iframes) > 0:
         pend = BeautifulSoup('<p></p>', features="html.parser")
@@ -398,7 +398,11 @@ def clear_article(url, html):
     post = article.prettify().replace('<div>', '').replace('</div>', '').strip(' \n')
     if pend:
         post += pend.prettify().strip(' \n')
-
+    try:
+        lenpost = len(post)
+    except:
+        lenpost = 0
+    _log.info(f'post length is {lenpost}')
     d = {
             'title':title,
             'img':title_img,
