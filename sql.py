@@ -205,7 +205,7 @@ def sql_add_image(img: dict):
         sql_conn.commit()
         return True
     except Exception as e:
-        _log.info(f'[NORMAL] image for {img["source"]} already exists')
+        _log.debug(f'[NORMAL] image for {img["source"]} already exists')
         sql_conn.rollback()
         return False
 
