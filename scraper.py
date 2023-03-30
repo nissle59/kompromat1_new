@@ -325,7 +325,7 @@ def clear_article(url, html):
             # del div['style']
     except Exception as e:
         _log.debug('div first: ' + str(e))
-    print(article.prettify())
+
     try:
         for a in article.select('a.link'):
             a.replaceWithChildren()
@@ -356,7 +356,7 @@ def clear_article(url, html):
             element.extract()
     except Exception as e:
         _log.debug('br: ' + str(e))
-
+    print(article.prettify())
     iframes = []
     try:
         if_count = 1
